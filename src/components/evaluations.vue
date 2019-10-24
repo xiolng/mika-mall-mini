@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import img from '../../static/images/showImage.png'
+  import img from '../../static/images/timg_1.jpg'
   export default {
     props: {
       itemDetail: Object

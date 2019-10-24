@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import img from '../../../static/images/showImage.png'
+  import img from '../../../static/images/timg_index.jpg'
   import Toast from '../../../static/vant/dist/toast/toast'
 
   export default {

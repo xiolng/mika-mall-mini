@@ -40,7 +40,7 @@
       },
       goIndex() {
         let url = `../index/main`
-        mpvue.reLaunch({
+        mpvue.switchTab({
           url
         })
       }

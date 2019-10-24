@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import img from '../../static/images/showImage.png'
+  import img from '../../static/images/timg_index.jpg'
   export default {
     props: {
       listData: Array

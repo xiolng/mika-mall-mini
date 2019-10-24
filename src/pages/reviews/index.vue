@@ -19,7 +19,6 @@
 
   export default {
     onLoad(option) {
-      console.log(333, option)
       this.reviewsData.id = option.id
       this.reviewsData.order_id = option.order_id
     },
@@ -31,7 +30,8 @@
           id: '',
           open_id: '1',
           order_id: ''
-        }
+        },
+        times: ''
 
       }
     },
@@ -59,7 +59,7 @@
                 mask: true,
                 forbidClick: true
               })
-              setTimeout(() => {
+              vm.times = setTimeout(() => {
                 mpvue.reLaunch({
                   url
                 })
@@ -71,9 +71,11 @@
     },
     onHide() {
       this.reviewsData = {}
+      this.times = null
     },
     onUnload() {
       this.reviewsData = {}
+      this.times = null
     }
   }
 </script>

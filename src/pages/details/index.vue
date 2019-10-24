@@ -52,9 +52,8 @@
 </template>
 
 <script>
-  import img from '../../../static/images/showImage.png'
+  import img from '../../../static/images/details.jpg'
   import evaluations from '../../components/evaluations' // 评论列表
-  import Toast from '../../../static/vant/dist/toast/toast'
 
   export default {
     onLoad(option) {
@@ -84,7 +83,6 @@
           url: 'http://192.168.1.131/mini/shop/getGoods',
           data: {goodsId: this.goodsId},
           success(res) {
-            console.log(res)
             vm.itemDetail = res.data['data']
             // 详情字符串格式
             vm.itemDetail.goodsInfo += ' '
@@ -93,7 +91,6 @@
             vm.all_price = vm.itemDetail.price
           },
           fail(res) {
-            Toast.fail(res)
           }
         })
       },

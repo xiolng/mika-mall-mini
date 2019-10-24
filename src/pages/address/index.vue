@@ -16,7 +16,7 @@
     <div class="address-input">
       <van-field
         label="联系电话"
-        placeholder="请输入联系电话"
+        placeholder="请输入手机号码"
         required
         @blur="blurPhone"
         @change="changePhone"
@@ -63,23 +63,6 @@
         value="220100"
       ></van-area>
     </van-popup>
-    <!--<van-divider contentPosition="center">商品列表</van-divider>-->
-    <!--&lt;!&ndash;商品列表&ndash;&gt;-->
-    <!--<van-card-->
-    <!--  v-for="item in list"-->
-    <!--  :key="item.id"-->
-    <!--  :title="item.title"-->
-    <!--  :desc="item.desc"-->
-    <!--  :price="item.price"-->
-    <!--  :thumb="item.thumb"-->
-    <!--  desc-class="ellipsis"-->
-    <!--&gt;-->
-    <!--  &lt;!&ndash;已售出数量&ndash;&gt;-->
-    <!--  <div class="num-txt" slot="bottom">-->
-    <!--    已售：{{item.been_sold}}-->
-    <!--  </div>-->
-    <!--</van-card>-->
-    <!--提交订单-->
     <div class="submit-box">
       <!--提交按钮-->
       <van-submit-bar
@@ -106,9 +89,9 @@
 
 <script>
   import area from '../../../static/area' // 省市数据
-  import successPay from '../../components/successPay'
-  import errorPay from '../../components/errorPay'
-  import {validPhone} from '../../utils'
+  import successPay from '../../components/successPay' // 成功提示
+  import errorPay from '../../components/errorPay' // 失败提示
+  import {validPhone} from '../../utils' // 手机号码验证
   import Notify from '../../../static/vant/dist/notify/notify'
 
   export default {
@@ -194,7 +177,7 @@
        */
       blurPhone(e) {
         if (!e.mp.detail.value) {
-          this.phoneErr = '请输入联系人电话'
+          this.phoneErr = '请输入手机号码'
           return false
         }
         if (!validPhone(e.mp.detail.value)) {
@@ -210,7 +193,7 @@
        */
       changePhone(e) {
         if (!e.mp.detail) {
-          this.phoneErr = '请输入联系人电话'
+          this.phoneErr = '请输入手机号码'
           return false
         }
         if (!validPhone(e.mp.detail)) {
@@ -274,7 +257,6 @@
           data: vm.payData,
           method: 'post',
           success(res) {
-            console.log(333, res)
             if (+res.data.code === 1) {
               vm.payCode = true
               vm.order_id = res.data['data']
@@ -282,10 +264,8 @@
               vm.payCode = false
             }
             vm.showPay = true
-            console.log(res)
           },
           fail(res) {
-            console.log(res)
           }
         })
       },
@@ -300,7 +280,6 @@
       errorPay
     },
     onUnload() {
-      console.log('address-load')
       this.payData.recipients = ''
       this.payData.phone = ''
       this.payData.address = ''
@@ -312,6 +291,7 @@
       this.showAddress = false
       this.recipientsErr = ''
       this.phoneErr = ''
+      this.addressValueErr = ''
       this.addressDetailErr = ''
       this.showPay = false
       this.payCode = false
