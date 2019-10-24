@@ -31,6 +31,7 @@
     "van-toast": "./static/vant/dist/toast/index",
     "van-tabs": "./static/vant/dist/tabs/index",
     "van-tab": "./static/vant/dist/tab/index",
+    "van-notify": "./static/vant/dist/notify/index",
     "van-radio": "./static/vant/dist/radio/index"
   },
   "tabBar": {

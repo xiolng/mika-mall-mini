@@ -9,24 +9,24 @@
           <div class="user-box">
             <!--图片-->
             <div class="user-img">
-              <img :src="item.thumb" alt="">
+              <img :src="img" alt="">
             </div>
             <div class="user-name">
               <!--用户名称-->
               <div class="name-box">
-                {{item.nickName}}
+                {{item.wxName}}
               </div>
             </div>
           </div>
         </div>
         <!--评论时间-->
         <div class="date-box">
-          {{item.rate_date}}
+          {{item.createdTime}}
         </div>
       </div>
       <!--评论详情-->
       <div class="evaluation-txt">
-        {{item.rate_detail}}
+        {{item.goodsComment}}
       </div>
       <van-divider/>
     </div>
@@ -34,12 +34,15 @@
 </template>
 
 <script>
+  import img from '../../static/images/showImage.png'
   export default {
     props: {
       itemDetail: Object
     },
     data() {
-      return {}
+      return {
+        img
+      }
     }
   }
 </script>

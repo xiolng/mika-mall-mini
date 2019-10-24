@@ -1,20 +1,20 @@
 <template>
   <div class="order-box">
-    <van-tabs :active="active">
+    <van-tabs :active="active" @change="changeTab">
       <!--全部-->
       <van-tab title="全部">
         <!--商品列表-->
-        <order-list :list-data="listData" />
+        <order-list :list-data="listData"/>
       </van-tab>
       <!--未评论-->
       <van-tab title="未评论">
         <!--商品列表-->
-        <order-list :list-data="listData" />
+        <order-list :list-data="listData"/>
       </van-tab>
       <!--已评论-->
       <van-tab title="已评论">
         <!--商品列表-->
-        <order-list :list-data="listData" />
+        <order-list :list-data="listData"/>
       </van-tab>
     </van-tabs>
 
@@ -28,36 +28,34 @@
 
     data() {
       return {
-        listData: [
-          {
-            id: '0111',
-            title: '电信手机卡',
-            desc: '99元单卡（1000分钟+40G）（长春全渠道）',
-            price: '34.56',
-            thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-            all_price: '9988',
-            price_num: '4',
-            is_review: 1
-          },
-          {
-            id: '0222',
-            title: '电信手机',
-            desc: '77元单卡（1000分钟+40G）（长春全渠道）',
-            price: '99.56',
-            thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-            all_price: '7788',
-            price_num: '4',
-            is_review: 0
-          }
-        ],
+        listData: [],
         active: 0
       }
     },
 
-    created() {
-
+    mounted() {
+      this.getOrder()
     },
     methods: {
+      getOrder(review = '') {
+        const vm = this
+        wx.request({
+          url: `http://192.168.1.131/mini/shop/orderList?open_id=1&is_review=${review}`,
+          success(res) {
+            if (+res.data.code === 1) {
+              vm.listData = res.data['data']
+            }
+          }
+        })
+      },
+      changeTab(e) {
+        const num = +e.mp.detail.name - 1
+        if (num >= 0) {
+          this.getOrder(num)
+          return false
+        }
+        this.getOrder('')
+      }
     },
     components: {
       orderList

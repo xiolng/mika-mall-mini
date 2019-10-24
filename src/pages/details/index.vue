@@ -1,7 +1,7 @@
 <template>
   <div class="detail-box">
     <!--title-->
-    <h1 class="detail-title">{{itemDetail.title}}</h1>
+    <h1 class="detail-title">{{itemDetail.goodsTitle}}</h1>
     <!--详情titile-->
     <van-divider
       contentPosition="center"
@@ -11,7 +11,7 @@
     </van-divider>
     <!--详情图片-->
     <div class="img-box">
-      <img :src="itemDetail.img_url" mode="scaleToFill"/>
+      <img :mode="aspectFit" :src="img" mode="scaleToFill"/>
     </div>
     <!--详情文字-->
     <div class="txt-box">
@@ -28,30 +28,33 @@
       用户评价
     </van-divider>
     <!--评论列表 组件-->
-    <evaluations :item-detail="itemDetail.reviews"></evaluations>
+    <evaluations :item-detail="itemDetail.commentList" v-if="itemDetail.commentList"></evaluations>
     <!--提交订单-->
     <div class="submit-box">
       <!--提交按钮-->
       <van-submit-bar
-        :price="allPrice*100"
+        :price="all_price*100"
         button-text="提交订单"
         @submit="submitOrder"
       >
         <!--数量-->
         <div class="stepper-box">
           <van-stepper
-            :value="allNum"
+            :value="price_num"
             integer
             @change="changePrice"
           ></van-stepper>
         </div>
       </van-submit-bar>
     </div>
+    <van-toast id="van-toast"/>
   </div>
 </template>
 
 <script>
+  import img from '../../../static/images/showImage.png'
   import evaluations from '../../components/evaluations' // 评论列表
+  import Toast from '../../../static/vant/dist/toast/toast'
 
   export default {
     onLoad(option) {
@@ -60,49 +63,47 @@
 
     data() {
       return {
+        img,
         goodsId: '', // 商品id
-        itemDetail: {
-          title: '商品名称',
-          img_url: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-          details: '套餐价格：99元/月 套餐内容：1000分钟+40G 套餐外资费： 语音0.15元/分 流量3元/G 24个月后恢复129元/月',
-          price: '33.44',
-          reviews: [
-            {
-              thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-              nickName: '用户名称',
-              rate_date: '评论时间',
-              rate_detail: '评论详情'
-            },
-            {
-              thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-              nickName: '11用户名称',
-              rate_date: '2019-01-02',
-              rate_detail: '评论详情评论详情评论详情评论详情评论详情评论详情评论详情评论详情评论详情评论详情评论详情评论详情评论详情评论详情'
-            }
-          ]
-        },
+        itemDetail: {},
         idDetail: '', // 格式化后的详情介绍
-        allNum: 1, // 总数量
-        allPrice: '0' // 总价格
+        price_num: 1, // 总数量
+        all_price: '0' // 总价格
       }
     },
 
     created() {
     },
     mounted() {
-      // 详情字符串格式，正式的在接口中执行
-      this.replaceTxt(this.itemDetail.details)
-      // 总价格初始化，正式的在接口中执行
-      this.allPrice = this.itemDetail.price
+      this.getDetail()
     },
     methods: {
+      getDetail() {
+        const vm = this
+        wx.request({
+          url: 'http://192.168.1.131/mini/shop/getGoods',
+          data: {goodsId: this.goodsId},
+          success(res) {
+            console.log(res)
+            vm.itemDetail = res.data['data']
+            // 详情字符串格式
+            vm.itemDetail.goodsInfo += ' '
+            vm.replaceTxt(vm.itemDetail.goodsInfo)
+            // 总价格初始化
+            vm.all_price = vm.itemDetail.price
+          },
+          fail(res) {
+            Toast.fail(res)
+          }
+        })
+      },
       /**
        * 商品数量变化
        * @param event 改变后的值
        */
       changePrice(event) {
-        this.allNum = event.mp.detail
-        this.allPrice = this.allNum * this.itemDetail.price
+        this.price_num = event.mp.detail
+        this.all_price = this.price_num * this.itemDetail.price
       },
       /**
        * 详情介绍格式化
@@ -113,7 +114,7 @@
       },
       // 提交到购买页
       submitOrder() {
-        let url = `../address/main?id=${this.goodsId}&allPrice=${this.allPrice}&allNum=${this.allNum}`
+        let url = `../address/main?id=${this.goodsId}&all_price=${this.all_price}&price_num=${this.price_num}`
         mpvue.navigateTo({
           url
         })
@@ -121,6 +122,13 @@
     },
     components: {
       evaluations
+    },
+    onHide() {
+      this.goodsId = ''
+      this.itemDetail = {}
+      this.idDetail = ''
+      this.price_num = 1
+      this.all_price = '0'
     }
   }
 </script>

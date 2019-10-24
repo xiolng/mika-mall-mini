@@ -3,24 +3,24 @@
     <!--商品列表-->
     <van-card
       v-for="list in listData"
-      :key="list.id"
-      :title="list.title"
-      :desc="list.desc"
+      :key="list.goodsId"
+      :title="list.goodsTitle"
+      :desc="list.goodsTitle"
       :price="list.price"
-      :thumb="list.thumb"
+      :thumb="img"
     >
       <!--已售出数量-->
       <div class="num-txt" slot="bottom">
         <div class="all-price">
           总价格：
           <div class="red">
-            ￥{{list.all_price}}
+            ￥{{list.priceSum}}
           </div>
         </div>
         <div class="price-num">
           数量：
           <div class="red">
-            {{list.price_num}}
+            {{list.buyAmount}}
           </div>
         </div>
       </div>
@@ -28,11 +28,11 @@
         <van-button
           type="warning"
           :loading="false"
-          @click="goReviews(list)"
+          @click="list.commentStatus ? '' : goReviews(list)"
           size="mini"
-          :disabled="list.is_review"
+          :disabled="list.commentStatus"
         >
-          {{list.is_review ? '已评论' : '评论'}}
+          {{list.commentStatus ? '已评论' : '评论'}}
         </van-button>
       </div>
     </van-card>
@@ -40,17 +40,20 @@
 </template>
 
 <script>
+  import img from '../../static/images/showImage.png'
   export default {
     props: {
       listData: Array
     },
     data() {
-      return {}
+      return {
+        img
+      }
     },
     methods: {
       goReviews(e) {
         if (e.is_review) return
-        let url = `../reviews/main?id=${111}`
+        let url = `../reviews/main?id=${e.goodsId}&order_id=${e.orderId}`
         mpvue.navigateTo({
           url
         })
@@ -61,6 +64,8 @@
 
 <style scoped lang="stylus">
 .order-list
+  padding 10px
+  margin-top 20px
   .num-txt
     display flex
     .red

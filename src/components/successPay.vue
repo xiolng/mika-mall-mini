@@ -18,7 +18,8 @@
 <script>
   export default {
     props: {
-      goodsId: String
+      id: String,
+      order_id: String
     },
 
     data() {
@@ -32,14 +33,14 @@
     },
     methods: {
       goReview() {
-        let url = `../reviews/main?id=${this.goodsId}`
+        let url = `../reviews/main?id=${this.id}&order_id=${this.order_id}`
         mpvue.reLaunch({
           url
         })
       },
       goIndex() {
         let url = `../index/main`
-        mpvue.switchTab({
+        mpvue.reLaunch({
           url
         })
       }

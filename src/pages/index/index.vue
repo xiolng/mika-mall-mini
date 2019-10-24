@@ -5,42 +5,46 @@
     <van-card
       v-for="item in list"
       :key="item.id"
-      :title="item.title"
-      :desc="item.desc"
+      :title="item.goodsTitle"
+      :desc="item.goodsTitle"
       :price="item.price"
-      :thumb="item.thumb"
+      :thumb="img"
       @click="goDetails(item)"
       desc-class="ellipsis"
     >
       <!--已售出数量-->
       <div class="num-txt" slot="bottom">
-        已售：{{item.been_sold}}
+        已售：{{item.salesCount}}
       </div>
     </van-card>
+    <van-toast id="van-toast"/>
   </div>
 </template>
 
 <script>
+  import img from '../../../static/images/showImage.png'
+  import Toast from '../../../static/vant/dist/toast/toast'
+
   export default {
     data() {
       return {
+        img,
         list: [
-          {
-            id: '0111',
-            title: '电信手机卡',
-            desc: '99元单卡（1000分钟+40G）（长春全渠道）',
-            price: '34.56',
-            thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-            been_sold: '9988'
-          },
-          {
-            id: '0222',
-            title: '电信手机',
-            desc: '77元单卡（1000分钟+40G）（长春全渠道）',
-            price: '99.56',
-            thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-            been_sold: '7788'
-          }
+          // {
+          //   commentList: null,
+          //   coverPath: '1',
+          //   createdBy: 1,
+          //   createdTime: '2019-10-23 00:00:00',
+          //   goodsInfo: null,
+          //   goodsTitle: '大礼包',
+          //   id: 1,
+          //   price: 100,
+          //   salesCount: 20037,
+          //   stock: 20,
+          //   updatedBy: 1,
+          //   updatedTime: '2019-10-23 00:00:00',
+          //   version: 1
+          // }
         ],
         userInfo: ''
       }
@@ -49,9 +53,11 @@
     components: {},
 
     mounted() {
+      this.getList()
       // 登录
       mpvue.getUserInfo({
         success(res) {
+          Toast.fail(res.data)
           wx.setStorage({
             key: 'userInfo',
             data: res.userInfo
@@ -60,6 +66,15 @@
       })
     },
     methods: {
+      getList() {
+        const vm = this
+        wx.request({
+          url: 'http://192.168.1.131/mini/shop/goodsList',
+          success(res) {
+            vm.list = res.data['data']
+          }
+        })
+      },
       /**
        * 跳转到详情页
        * @param item 商品信息

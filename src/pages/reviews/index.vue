@@ -19,14 +19,20 @@
 
   export default {
     onLoad(option) {
-      this.id = option.id
+      console.log(333, option)
+      this.reviewsData.id = option.id
+      this.reviewsData.order_id = option.order_id
     },
 
     data() {
       return {
-        rate_detail: '',
-        id: '',
-        open_id: ''
+        reviewsData: {
+          rate_detail: '',
+          id: '',
+          open_id: '1',
+          order_id: ''
+        }
+
       }
     },
 
@@ -37,32 +43,52 @@
     },
     methods: {
       changeRate(e) {
-        this.rate_detail = e.mp.detail
+        this.reviewsData.rate_detail = e.mp.detail
       },
       submitReview() {
-        console.log(this.rate_detail)
-        Toast.success({
-          message: '提交成功',
-          mask: true,
-          forbidClick: true
-        })
+        const vm = this
         let url = '../order/main'
-        setTimeout(() => {
-          mpvue.switchTab({
-            url
-          })
-        }, 1500)
+        wx.request({
+          url: 'http://192.168.1.131/mini/shop/goodsComment',
+          data: vm.reviewsData,
+          method: 'post',
+          success(res) {
+            if (+res.data.code === 1) {
+              Toast.success({
+                message: '提交成功',
+                mask: true,
+                forbidClick: true
+              })
+              setTimeout(() => {
+                mpvue.reLaunch({
+                  url
+                })
+              }, 1500)
+            }
+          }
+        })
       }
+    },
+    onHide() {
+      this.reviewsData = {}
+    },
+    onUnload() {
+      this.reviewsData = {}
     }
   }
 </script>
 
 <style scoped lang="stylus">
+  /*评论盒子*/
   .review-box
     padding 10px
 
+    /*评论标题*/
+
     .rate-txt
       color #888
+
+    //评论输入框
 
     .review-input
       margin 20px 0
@@ -70,11 +96,8 @@
       /deep/ textarea
         min-height 100px
 
+      //评论按钮
+
       .review-btn
         margin-bottom: 20px
-
-    .rate-box
-      display flex
-      justify-content start
-      flex-direction row
 </style>

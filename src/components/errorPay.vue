@@ -35,7 +35,7 @@
       // 返回首页
       goIndex() {
         let url = `../index/main`
-        mpvue.switchTab({
+        mpvue.reLaunch({
           url
         })
       }

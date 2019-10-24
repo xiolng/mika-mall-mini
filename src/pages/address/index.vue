@@ -3,11 +3,25 @@
     <van-divider contentPosition="center">邮寄地址</van-divider>
     <!--收件人-->
     <div class="address-input">
-      <van-field v-model="recipients" label="收件人" placeholder="请输入收件人姓名"></van-field>
+      <van-field
+        label="收件人"
+        placeholder="请输入收件人姓名"
+        required
+        @blur="blurRecipients"
+        @change="changeRecipients"
+        :error-message="recipientsErr"
+      ></van-field>
     </div>
     <!--联系电话-->
     <div class="address-input">
-      <van-field v-model="phone" label="联系电话" placeholder="请输入联系电话"></van-field>
+      <van-field
+        label="联系电话"
+        placeholder="请输入联系电话"
+        required
+        @blur="blurPhone"
+        @change="changePhone"
+        :error-message="phoneErr"
+      ></van-field>
     </div>
     <!--地址-->
     <div class="address-input">
@@ -16,55 +30,60 @@
         :value="addressValue"
         @click="showAddress = true"
         disabled
-        placeholder="请输入地址"
+        required
+        placeholder="请选择地址"
+        :error-message="addressValueErr"
       ></van-field>
     </div>
     <!--详细地址-->
     <div class="address-input">
       <van-field
-        v-model="addressDetail"
         label="详细地址"
         placeholder="请输入详细地址"
         type="textarea"
         autosize
+        required
+        @blur="blurAddress"
         @change="changeAddress"
+        :error-message="addressDetailErr"
       ></van-field>
     </div>
     <!--省市选择弹出框-->
     <van-popup
       :show="showAddress"
       position="bottom"
-      custom-style="height: 50%"
       @close="closePop"
+      z-index="200"
     >
       <!--省时选择组件-->
       <van-area
         :area-list="areaList"
         @confirm="confirmAddress"
         @cancel="closePop"
+        value="220100"
       ></van-area>
     </van-popup>
-    <van-divider contentPosition="center">商品列表</van-divider>
-    <!--商品列表-->
-    <van-card
-      v-for="item in list"
-      :key="item.id"
-      :title="item.title"
-      :desc="item.desc"
-      :price="item.price"
-      :thumb="item.thumb"
-      desc-class="ellipsis"
-    >
-      <!--已售出数量-->
-      <div class="num-txt" slot="bottom">
-        已售：{{item.been_sold}}
-      </div>
-    </van-card>
+    <!--<van-divider contentPosition="center">商品列表</van-divider>-->
+    <!--&lt;!&ndash;商品列表&ndash;&gt;-->
+    <!--<van-card-->
+    <!--  v-for="item in list"-->
+    <!--  :key="item.id"-->
+    <!--  :title="item.title"-->
+    <!--  :desc="item.desc"-->
+    <!--  :price="item.price"-->
+    <!--  :thumb="item.thumb"-->
+    <!--  desc-class="ellipsis"-->
+    <!--&gt;-->
+    <!--  &lt;!&ndash;已售出数量&ndash;&gt;-->
+    <!--  <div class="num-txt" slot="bottom">-->
+    <!--    已售：{{item.been_sold}}-->
+    <!--  </div>-->
+    <!--</van-card>-->
     <!--提交订单-->
     <div class="submit-box">
       <!--提交按钮-->
       <van-submit-bar
-        :price="allPrice"
+        :price="all_price"
         button-text="支付"
         @click="payS"
       >
@@ -78,9 +97,10 @@
       :close-on-click-overlay="false"
       custom-style="width:60%;"
     >
-      <success-pay :goods-id="goodsId" v-if="payCode"></success-pay>
+      <success-pay :id="payData.id" :order_id="order_id" v-if="payCode"></success-pay>
       <error-pay :close-pop="closePayPop" v-if="!payCode"></error-pay>
     </van-popup>
+    <van-notify id="van-notify"/>
   </div>
 </template>
 
@@ -88,46 +108,37 @@
   import area from '../../../static/area' // 省市数据
   import successPay from '../../components/successPay'
   import errorPay from '../../components/errorPay'
+  import {validPhone} from '../../utils'
+  import Notify from '../../../static/vant/dist/notify/notify'
 
   export default {
     onLoad(option) {
-      this.goodsId = option.id
-      this.allPrice = option.allPrice
-      this.allNum = option.allNum
+      this.payData.id = option.id
+      this.payData.all_price = option.all_price
+      this.payData.price_num = option.price_num
     },
 
     data() {
       return {
-        recipients: '',
-        phone: '',
-        address: '',
-        addressDetail: '',
-        areaList: area,
-        addressValue: '',
-        showAddress: false,
-        list: [
-          {
-            id: '0111',
-            title: '电信手机卡',
-            desc: '99元单卡（1000分钟+40G）（长春全渠道）',
-            price: '34.56',
-            thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-            been_sold: '9988'
-          },
-          {
-            id: '0222',
-            title: '电信手机',
-            desc: '77元单卡（1000分钟+40G）（长春全渠道）',
-            price: '99.56',
-            thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg',
-            been_sold: '7788'
-          }
-        ],
-        allPrice: '',
-        allNum: '',
-        goodsId: '',
-        showPay: false,
-        payCode: false
+        payData: {
+          recipients: '', // 收件人
+          phone: '', // 联系电话
+          address: '', // 收件地址
+          all_price: '', // 总价格
+          price_num: '', // 总数量
+          id: '' // 商品id
+        },
+        order_id: '', // 支付成功后，订单id
+        addressDetail: '', // 地址详情
+        areaList: area, // 省市数据
+        addressValue: '', // 收件地址详情
+        showAddress: false, // 省市选择
+        recipientsErr: '', // 收件人错误提示
+        phoneErr: '', // 电话错误提示
+        addressValueErr: '',
+        addressDetailErr: '', // 详细地址错误提示
+        showPay: false, // 支付结果弹窗
+        payCode: false // 支付结果状态
       }
     },
 
@@ -149,31 +160,161 @@
         let data = e.mp.detail.values
         data.map(v => {
           this.addressValue += `${v.name} `
+          this.addressValueErr = ''
         })
-        this.address = this.addressValue + this.addressDetail
+        this.payData.address = this.addressValue + this.addressDetail
         this.showAddress = false
+      },
+      /**
+       * 收件人校验
+       * @param e
+       */
+      blurRecipients(e) {
+        if (!e.mp.detail.value) {
+          this.recipientsErr = '请输入收件人姓名'
+          return false
+        }
+        this.payData.recipients = e.mp.detail.value
+        this.recipientsErr = ''
+      },
+      /**
+       * 收件人校验
+       * @param e
+       */
+      changeRecipients(e) {
+        if (!e.mp.detail) {
+          this.recipientsErr = '请输入收件人姓名'
+          return false
+        }
+        this.recipientsErr = ''
+      },
+      /**
+       * 联系电话校验
+       * @param e
+       */
+      blurPhone(e) {
+        if (!e.mp.detail.value) {
+          this.phoneErr = '请输入联系人电话'
+          return false
+        }
+        if (!validPhone(e.mp.detail.value)) {
+          this.phoneErr = '请输入正确手机号码'
+          return false
+        }
+        this.payData.phone = e.mp.detail.value
+        this.phoneErr = ''
+      },
+      /**
+       * 联系电话校验
+       * @param e
+       */
+      changePhone(e) {
+        if (!e.mp.detail) {
+          this.phoneErr = '请输入联系人电话'
+          return false
+        }
+        if (!validPhone(e.mp.detail)) {
+          this.phoneErr = '请输入正确手机号码'
+          return false
+        }
+        this.phoneErr = ''
+      },
+      /**
+       * 详细地址
+       * @param e
+       */
+      blurAddress(e) {
+        if (!e.mp.detail.value) {
+          this.addressDetailErr = '请输入详细地址'
+          return false
+        }
+        this.addressDetail = e.mp.detail.value
+        this.payData.address = this.addressValue + this.addressDetail
       },
       /**
        * 详细地址
        * @param e
        */
       changeAddress(e) {
-        this.addressDetail = e.mp.detail
-        this.address = this.addressValue + this.addressDetail
+        if (!e.mp.detail) {
+          this.addressDetailErr = '请输入详细地址'
+          return false
+        }
+        this.addressDetailErr = ''
       },
       // 支付
       payS() {
-        this.payCode = true
-        this.showPay = true
+        if (this.payData.recipients === '') {
+          this.recipientsErr = '请输入收件人姓名'
+        }
+        if (this.payData.phone === '') {
+          this.phoneErr = '请输入联系电话'
+        }
+        if (this.addressValue === '') {
+          this.addressValueErr = '请选择地址'
+        }
+        if (this.addressDetail === '') {
+          this.addressDetailErr = '请输入详细地址'
+        }
+        let list = []
+        Object.keys(this.payData).map(v => {
+          list.push(this.payData[v] !== '')
+        })
+        if (list.every(v => v) === false) {
+          Notify({
+            type: 'danger',
+            message: '请填写完整信息'
+          })
+          return false
+        }
+        const vm = this
+        this.payData.open_id = '1'
+        wx.request({
+          url: 'http://192.168.1.131/mini/shop/payGoods',
+          data: vm.payData,
+          method: 'post',
+          success(res) {
+            console.log(333, res)
+            if (+res.data.code === 1) {
+              vm.payCode = true
+              vm.order_id = res.data['data']
+            } else {
+              vm.payCode = false
+            }
+            vm.showPay = true
+            console.log(res)
+          },
+          fail(res) {
+            console.log(res)
+          }
+        })
       },
       // 支付结果弹窗
       closePayPop() {
         this.showPay = false
+        this.payCode = false
       }
     },
     components: {
       successPay,
       errorPay
+    },
+    onUnload() {
+      console.log('address-load')
+      this.payData.recipients = ''
+      this.payData.phone = ''
+      this.payData.address = ''
+      this.payData.all_price = ''
+      this.payData.price_num = ''
+      this.payData.id = ''
+      this.addressDetail = ''
+      this.addressValue = ''
+      this.showAddress = false
+      this.recipientsErr = ''
+      this.phoneErr = ''
+      this.addressDetailErr = ''
+      this.showPay = false
+      this.payCode = false
     }
   }
 </script>
@@ -182,6 +323,7 @@
   .address-box {
     padding: 10px;
   }
+
   /*商品卡片*/
   /deep/ .address-box .van-card
     background #f4f2ea
