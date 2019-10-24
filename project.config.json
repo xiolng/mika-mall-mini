@@ -9,7 +9,7 @@
     },
     "miniprogramRoot": "dist/wx/",
     "compileType": "miniprogram",
-    "appid": "	wx3c271b98fc5bd40d",
+    "appid": "wx3c271b98fc5bd40d",
     "projectname": "mika-mall-mini",
     "condition": {
         "search": {
