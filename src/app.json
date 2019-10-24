@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/details/main",
+    "pages/address/main",
+    "pages/reviews/main",
+    "pages/order/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "首页",
+    "navigationBarTextStyle": "black"
+  },
+  "usingComponents": {
+    "van-button": "./static/vant/dist/button/index",
+    "van-row": "./static/vant/dist/row/index",
+    "van-col": "./static/vant/dist/col/index",
+    "van-field": "./static/vant/dist/field/index",
+    "van-card": "./static/vant/dist/card/index",
+    "van-popup": "./static/vant/dist/popup/index",
+    "van-picker": "./static/vant/dist/picker/index",
+    "van-checkbox": "./static/vant/dist/checkbox/index",
+    "van-icon": "./static/vant/dist/icon/index",
+    "van-divider": "./static/vant/dist/divider/index",
+    "van-stepper": "./static/vant/dist/stepper/index",
+    "van-submit-bar": "./static/vant/dist/submit-bar/index",
+    "van-tag": "./static/vant/dist/tag/index",
+    "van-rate": "./static/vant/dist/rate/index",
+    "van-area": "./static/vant/dist/area/index",
+    "van-toast": "./static/vant/dist/toast/index",
+    "van-tabs": "./static/vant/dist/tabs/index",
+    "van-tab": "./static/vant/dist/tab/index",
+    "van-radio": "./static/vant/dist/radio/index"
+  },
+  "tabBar": {
+    "color": "#999",
+    "backgroundColor": "#fafafa",
+    "selectedColor": "#333",
+    "borderStyle": "white",
+
+    "list": [{
+      "text": "首页",
+      "pagePath": "pages/index/main",
+      "iconPath": "static/tabs/home.png",
+      "selectedIconPath": "static/tabs/home-active.png"
+    }, {
+      "text": "订单",
+      "pagePath": "pages/order/main",
+      "iconPath": "static/tabs/orders.png",
+      "selectedIconPath": "static/tabs/orders-active.png"
+    }],
+
+    "position": "bottom"
+  }
+}
