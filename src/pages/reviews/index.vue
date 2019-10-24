@@ -47,12 +47,11 @@
           forbidClick: true
         })
         let url = '../order/main'
-        let times = setTimeout(() => {
+        setTimeout(() => {
           mpvue.switchTab({
             url
           })
         }, 1500)
-        clearTimeout(times)
       }
     }
   }
