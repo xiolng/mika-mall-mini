@@ -1,6 +1,6 @@
 <template>
   <div class="order-box">
-    <van-tabs :active="active" @change="changeTab">
+    <van-tabs :active="active" @change="changeTab" animated swipeable>
       <!--全部-->
       <van-tab title="全部">
         <!--商品列表-->
