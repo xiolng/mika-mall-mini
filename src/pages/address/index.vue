@@ -253,7 +253,7 @@
         const vm = this
         this.payData.open_id = '1'
         wx.request({
-          url: 'http://192.168.1.131/mini/shop/payGoods',
+          url: 'https://jiadacc.com/mini/shop/payGoods',
           data: vm.payData,
           method: 'post',
           success(res) {

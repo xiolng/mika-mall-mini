@@ -80,7 +80,7 @@
       getDetail() {
         const vm = this
         wx.request({
-          url: 'http://192.168.1.131/mini/shop/getGoods',
+          url: 'https://jiadacc.com/mini/shop/getGoods',
           data: {goodsId: this.goodsId},
           success(res) {
             vm.itemDetail = res.data['data']

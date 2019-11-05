@@ -29,23 +29,7 @@
     data() {
       return {
         img,
-        list: [
-          // {
-          //   commentList: null,
-          //   coverPath: '1',
-          //   createdBy: 1,
-          //   createdTime: '2019-10-23 00:00:00',
-          //   goodsInfo: null,
-          //   goodsTitle: '大礼包',
-          //   id: 1,
-          //   price: 100,
-          //   salesCount: 20037,
-          //   stock: 20,
-          //   updatedBy: 1,
-          //   updatedTime: '2019-10-23 00:00:00',
-          //   version: 1
-          // }
-        ],
+        list: [],
         userInfo: ''
       }
     },
@@ -53,10 +37,19 @@
     components: {},
 
     mounted() {
+      wx.showShareMenu({
+        withShareTicket: true
+      })
       this.getList()
       // 登录
-      mpvue.getUserInfo({
+      mpvue.requestPayment({
+        timeStamp: '',
+        nonceStr: '',
+        package: '',
+        signType: 'MD5',
+        paySign: '',
         success(res) {
+          console.log(res)
           Toast.fail(res.data)
           wx.setStorage({
             key: 'userInfo',
@@ -66,10 +59,12 @@
       })
     },
     methods: {
+      setOpen() {
+      },
       getList() {
         const vm = this
         wx.request({
-          url: 'http://192.168.1.131/mini/shop/goodsList',
+          url: 'https://jiadacc.com/mini/shop/goodsList',
           success(res) {
             vm.list = res.data['data']
           }

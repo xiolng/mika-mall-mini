@@ -40,7 +40,7 @@
       getOrder(review = '') {
         const vm = this
         wx.request({
-          url: `http://192.168.1.131/mini/shop/orderList?open_id=1&is_review=${review}`,
+          url: `https://jiadacc.com/mini/shop/orderList?open_id=1&is_review=${review}`,
           success(res) {
             if (+res.data.code === 1) {
               vm.listData = res.data['data']

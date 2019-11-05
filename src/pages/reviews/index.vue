@@ -49,7 +49,7 @@
         const vm = this
         let url = '../order/main'
         wx.request({
-          url: 'http://192.168.1.131/mini/shop/goodsComment',
+          url: 'https://jiadacc.com/mini/shop/goodsComment',
           data: vm.reviewsData,
           method: 'post',
           success(res) {
