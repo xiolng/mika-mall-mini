@@ -23,7 +23,7 @@
 
 <script>
   import img from '../../../static/images/timg_index.jpg'
-  import Toast from '../../../static/vant/dist/toast/toast'
+  // import Toast from '../../../static/vant/dist/toast/toast'
 
   export default {
     data() {
@@ -42,21 +42,16 @@
       })
       this.getList()
       // 登录
-      mpvue.requestPayment({
-        timeStamp: '',
-        nonceStr: '',
-        package: '',
-        signType: 'MD5',
-        paySign: '',
-        success(res) {
-          console.log(res)
-          Toast.fail(res.data)
-          wx.setStorage({
-            key: 'userInfo',
-            data: res.userInfo
-          })
-        }
-      })
+      // mpvue.getUserInfo({
+      //   success(res) {
+      //     console.log(res)
+      //     Toast.fail(res.data)
+      //     wx.setStorage({
+      //       key: 'userInfo',
+      //       data: res.userInfo
+      //     })
+      //   }
+      // })
     },
     methods: {
       setOpen() {
