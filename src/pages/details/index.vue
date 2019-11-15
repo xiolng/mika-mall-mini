@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import img from '../../../static/images/details.jpg'
+  import img from '../../../static/images/details.png'
   import evaluations from '../../components/evaluations' // 评论列表
 
   export default {
@@ -80,7 +80,7 @@
       getDetail() {
         const vm = this
         wx.request({
-          url: 'https://jiadacc.com/mini/shop/getGoods',
+          url: 'https://miniapp.jiadacc.com/mini/shop/getGoods',
           data: {goodsId: this.goodsId},
           success(res) {
             vm.itemDetail = res.data['data']
@@ -112,7 +112,7 @@
       // 提交到购买页
       submitOrder() {
         let url = `../address/main?id=${this.goodsId}&all_price=${this.all_price}&price_num=${this.price_num}`
-        mpvue.navigateTo({
+        wx.navigateTo({
           url
         })
       }

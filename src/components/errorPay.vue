@@ -35,7 +35,7 @@
       // 返回首页
       goIndex() {
         let url = `../index/main`
-        mpvue.reLaunch({
+        wx.reLaunch({
           url
         })
       }

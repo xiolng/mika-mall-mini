@@ -34,13 +34,13 @@
     methods: {
       goReview() {
         let url = `../reviews/main?id=${this.id}&order_id=${this.order_id}`
-        mpvue.reLaunch({
+        wx.reLaunch({
           url
         })
       },
       goIndex() {
         let url = `../index/main`
-        mpvue.switchTab({
+        wx.switchTab({
           url
         })
       }

@@ -34,13 +34,14 @@
     },
 
     mounted() {
+      console.log(333)
       this.getOrder()
     },
     methods: {
       getOrder(review = '') {
         const vm = this
         wx.request({
-          url: `https://jiadacc.com/mini/shop/orderList?open_id=1&is_review=${review}`,
+          url: `https://miniapp.jiadacc.com/mini/shop/orderList?open_id=1&is_review=${review}`,
           success(res) {
             if (+res.data.code === 1) {
               vm.listData = res.data['data']

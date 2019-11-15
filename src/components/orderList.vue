@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import img from '../../static/images/timg_index.jpg'
+  import img from '../../static/images/details.png'
   export default {
     props: {
       listData: Array
@@ -54,7 +54,7 @@
       goReviews(e) {
         if (e.is_review) return
         let url = `../reviews/main?id=${e.goodsId}&order_id=${e.orderId}`
-        mpvue.navigateTo({
+        wx.navigateTo({
           url
         })
       }

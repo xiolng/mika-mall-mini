@@ -49,7 +49,7 @@
         const vm = this
         let url = '../order/main'
         wx.request({
-          url: 'https://jiadacc.com/mini/shop/goodsComment',
+          url: 'https://miniapp.jiadacc.com/mini/shop/goodsComment',
           data: vm.reviewsData,
           method: 'post',
           success(res) {
@@ -60,7 +60,7 @@
                 forbidClick: true
               })
               vm.times = setTimeout(() => {
-                mpvue.reLaunch({
+                wx.reLaunch({
                   url
                 })
               }, 1500)

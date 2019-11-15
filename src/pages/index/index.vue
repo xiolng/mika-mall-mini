@@ -22,8 +22,7 @@
 </template>
 
 <script>
-  import img from '../../../static/images/timg_index.jpg'
-  // import Toast from '../../../static/vant/dist/toast/toast'
+  import img from '../../../static/images/details.png'
 
   export default {
     data() {
@@ -41,25 +40,12 @@
         withShareTicket: true
       })
       this.getList()
-      // 登录
-      // mpvue.getUserInfo({
-      //   success(res) {
-      //     console.log(res)
-      //     Toast.fail(res.data)
-      //     wx.setStorage({
-      //       key: 'userInfo',
-      //       data: res.userInfo
-      //     })
-      //   }
-      // })
     },
     methods: {
-      setOpen() {
-      },
       getList() {
         const vm = this
         wx.request({
-          url: 'https://jiadacc.com/mini/shop/goodsList',
+          url: 'https://miniapp.jiadacc.com/mini/shop/goodsList',
           success(res) {
             vm.list = res.data['data']
           }
@@ -71,7 +57,7 @@
        */
       goDetails(item) {
         let url = `../details/main?id=${item.id}`
-        mpvue.navigateTo({
+        wx.navigateTo({
           url
         })
       }
